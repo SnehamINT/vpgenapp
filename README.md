@@ -1,5 +1,5 @@
 # VPGenApp 🚀
-A Value Proposition Generator app built with React + Vite + Tailwind + DaisyUI.
+A Value Proposition Generator app built with React + Vite + Tailwind
 
 ## ✨ Features
 - Generate value propositions
