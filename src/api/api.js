@@ -70,12 +70,15 @@ Format the response as 3 separate value propositions, each clearly labeled as "D
 
     const generatedText = data.candidates[0].content.parts.map(p => p.text || '').join('\n').trim();
 
-    // Helper: strip common markdown wrappers like **bold** and surrounding quotes
+    // Helper: strip common markdown wrappers like **bold**, *italic*, and quotes
     const stripMd = (s) => s
-      .replace(/^['"\s]+|['"\s]+$/g, '')
-      .replace(/\*\*/g, '')
-      .replace(/\s+/g, ' ')
-      .trim();
+    .replace(/^['"*\s]+|['"*\s]+$/g, '')   // remove leading/trailing quotes, asterisks, spaces
+    .replace(/\*\*/g, '')                  // remove bold markers
+    .replace(/\*/g, '')                    // remove italics
+    .replace(/^['"\s]+|['"\s]+$/g, '')     // remove quotes again after cleanup
+    .replace(/\s+/g, ' ')
+    .trim();
+
 
     const propositions = [];
 
