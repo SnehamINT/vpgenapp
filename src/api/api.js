@@ -10,7 +10,20 @@ export const generateValuePropositions = async (formData) => {
     const industry = formData.industry === 'Other' ? formData.customIndustry : formData.industry;
     const challenge = formData.challenge === 'Other' ? formData.customChallenge : formData.challenge;
 
-    const prompt = `Generate 3 compelling value propositions for a company in the ${industry} industry that is facing the challenge of ${challenge}. 
+    // Use custom prompt if provided, otherwise use default
+    let prompt;
+    if (formData.customPrompt && formData.customPrompt.trim()) {
+      // Replace placeholders in custom prompt
+      prompt = formData.customPrompt
+        .replace(/\[INDUSTRY\]/g, industry)
+        .replace(/\[CHALLENGE\]/g, challenge)
+        .replace(/\[COMPANY_NAME\]/g, formData.companyName || 'Our organization')
+        .replace(/\[GOAL\]/g, formData.goal)
+        .replace(/\[CLIENT_CONTEXT\]/g, formData.clientContext || 'General business clients')
+        .replace(/\[TONE\]/g, formData.tone);
+    } else {
+      // Default prompt
+      prompt = `Generate 3 compelling value propositions for a company in the ${industry} industry that is facing the challenge of ${challenge}. 
 
 Company Details:
 - Company Name: ${formData.companyName || 'Our organization'}
@@ -27,6 +40,7 @@ Requirements:
 6. Avoid generic statements - be specific to the industry and challenge
 
 Format the response as 3 separate value propositions, each clearly labeled as "Draft 1:", "Draft 2:", and "Draft 3:".`;
+    }
 
     const response = await fetch(`${GEMINI_API_URL}?key=${GEMINI_API_KEY}`, {
       method: 'POST',
